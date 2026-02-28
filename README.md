@@ -69,6 +69,23 @@ Deploy the local folder directly into your Chrome browser:
 4. **Solve Problems**: Head over to the [GeeksForGeeks Explore](https://www.geeksforgeeks.org/explore) page and start coding! 
 5. **Watch the Magic**: Whenever you successfully submit a correct solution, head directly to your GitHub repository to see the newly synced code and its elegantly formatted `README.md`.
 
+## 🎨 Customizing the UI (For Developers)
+
+If you downloaded the ZIP file just to use the extension, **you do not need to install Node.js or run any commands.** The fully compiled `tailwind.css` file is already included.
+
+However, if you want to modify the physical styling, alter the responsive design, or add new UI elements using Tailwind utility classes, follow these steps:
+
+1. Install the node modules locally to fetch the Tailwind CLI dependency:
+   ```bash
+   npm install
+   ```
+2. Make your targeted HTML attribute changes or update the `tailwind.config.js` palette.
+3. Automatically rebuild the final production CSS file using:
+   ```bash
+   npx tailwindcss -i css/input.css -o css/tailwind.css
+   ```
+   *Note: If you are actively coding, just add the `--watch` flag at the end of the command to rebuild live as you type.*
+
 ---
 
 ## 📝 Technologies Used
