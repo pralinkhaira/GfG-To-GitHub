@@ -1,2 +1,5 @@
 # Extensions credentials
 scripts/secrets.js
+
+# Node Packages
+node_modules/
