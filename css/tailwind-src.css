@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 p-0 text-slate-800 bg-white dark:bg-slate-900 dark:text-slate-200 transition-colors duration-300 antialiased font-sans;
+  }
+}
+
+.github_logo {
+  transition: all 0.3s ease;
+}

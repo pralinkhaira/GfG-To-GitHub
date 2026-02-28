@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./scripts/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./css/tailwind.css">
+    <link rel="stylesheet" href="./css/switch.css">
+    <title>GfG to GitHub</title>
+</head>
+
+<body
+    class="m-0 p-0 w-screen min-h-screen bg-[#030712] text-slate-300 font-sans overflow-x-hidden relative selection:bg-emerald-500/20 antialiased">
+
+    <!-- Subtle Background Pattern -->
+    <div
+        class="fixed inset-0 z-0 pointer-events-none opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CiAgPGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNmZmYiLz4KPC9zdmc+')] [mask-image:linear-gradient(to_bottom,white,transparent)]">
+    </div>
+    <div id="particles-js" class="fixed inset-0 z-0 opacity-30 pointer-events-none"></div>
+
+    <!-- Soft Glow Accents -->
+    <div
+        class="fixed top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-emerald-900/10 blur-[100px] pointer-events-none">
+    </div>
+    <div
+        class="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-blue-900/10 blur-[100px] pointer-events-none">
+    </div>
+
+    <main class="relative z-10 container mx-auto px-6 py-16 flex flex-col items-center min-h-[90vh] justify-center">
+
+        <!-- Minimal Header -->
+        <header id="title" class="flex flex-col items-center mb-12 text-center animate-fade-in-down w-full max-w-4xl">
+            <div
+                class="inline-flex items-center justify-center gap-4 px-6 py-3 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md mb-8 transition-all hover:bg-white/[0.05]">
+                <img id="gfglogo" src="./assets/GeeksforGeeks.png" alt="GfG Logo"
+                    class="h-6 md:h-8 object-contain filter brightness-110 opacity-90">
+                <svg class="w-4 h-4 text-slate-500 mx-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3">
+                    </path>
+                </svg>
+                <img id="github_logo" src="./assets/github_white.png" alt="GitHub Logo"
+                    class="h-7 md:h-9 object-contain opacity-90">
+            </div>
+
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4">
+                Your Progress,<br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Beautifully
+                    Synced.</span>
+            </h1>
+            <p class="text-base md:text-lg text-slate-400 max-w-xl font-medium">
+                Effortlessly record your exact code solutions straight to your personal GitHub portfolio.
+            </p>
+        </header>
+
+        <!-- Link Repo Phase -->
+        <div id="link_repo_phase" class="w-full max-w-xl mx-auto flex flex-col gap-6 animate-fade-in-up"
+            style="display: none;">
+            <div
+                class="bg-[#0f172a]/60 backdrop-blur-xl rounded-2xl shadow-xl border border-white/[0.08] w-full p-8 md:p-10">
+                <form class="flex flex-col gap-8">
+                    <!-- Step 1: Type selection -->
+                    <div class="flex flex-col gap-5">
+                        <div class="flex items-center gap-3 mb-1">
+                            <span
+                                class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700">1</span>
+                            <h3 class="text-lg font-semibold text-white">Repository Setup</h3>
+                        </div>
+
+                        <div id="radio_group" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label
+                                class="relative flex items-center p-4 rounded-xl border border-slate-700/60 hover:border-emerald-500/50 cursor-pointer bg-slate-900/50 hover:bg-slate-800 transition-all group">
+                                <input id="create_new" name="radio" value="create" type="radio"
+                                    class="w-4 h-4 text-emerald-500 bg-slate-950 border-slate-700 focus:ring-emerald-500/30 focus:ring-2 focus:ring-offset-slate-900 transition-colors">
+                                <span class="ml-3 text-sm font-medium text-slate-300 group-hover:text-white">Create
+                                    Private</span>
+                            </label>
+                            <label
+                                class="relative flex items-center p-4 rounded-xl border border-slate-700/60 hover:border-emerald-500/50 cursor-pointer bg-slate-900/50 hover:bg-slate-800 transition-all group">
+                                <input id="link_existing" name="radio" value="link" type="radio"
+                                    class="w-4 h-4 text-emerald-500 bg-slate-950 border-slate-700 focus:ring-emerald-500/30 focus:ring-2 focus:ring-offset-slate-900 transition-colors">
+                                <span class="ml-3 text-sm font-medium text-slate-300 group-hover:text-white">Link
+                                    Existing</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Input -->
+                    <div class="flex flex-col gap-5">
+                        <div class="flex items-center gap-3 mb-1">
+                            <span
+                                class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700">2</span>
+                            <h3 class="text-lg font-semibold text-white">Repository Name</h3>
+                        </div>
+
+                        <input autocomplete="off" id="repositoryNameTextField" type="text"
+                            placeholder="e.g. GfG-Solutions"
+                            class="w-full px-5 py-4 text-base rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/70 focus:ring-2 focus:ring-emerald-500/20 transition-all" />
+
+                        <button id="linkRepositoryButton" type="button"
+                            class="mt-2 w-full py-4 rounded-xl bg-white text-slate-900 hover:bg-slate-200 text-base font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                            Complete Setup
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Phase -->
+        <div id="solve_and_push_phase" class="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-fade-in-up"
+            style="display: none;">
+
+            <div
+                class="bg-[#0f172a]/70 backdrop-blur-xl rounded-3xl border border-white/[0.08] p-8 md:p-12 w-full shadow-2xl">
+                <div class="flex flex-col items-center">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Total Solved</p>
+
+                    <div class="mb-12">
+                        <span id="successful_submissions"
+                            class="text-7xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 drop-shadow-sm">0</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 w-full border-t border-white/[0.06] pt-8">
+                        <div
+                            class="flex flex-col items-center p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                            <span
+                                class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">School</span>
+                            <span id="successful_submissions_school" class="text-2xl font-bold text-white">0</span>
+                        </div>
+                        <div
+                            class="flex flex-col items-center p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                            <span
+                                class="text-[11px] font-semibold text-blue-400 uppercase tracking-wider mb-2">Basic</span>
+                            <span id="successful_submissions_basic" class="text-2xl font-bold text-white">0</span>
+                        </div>
+                        <div
+                            class="flex flex-col items-center p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                            <span
+                                class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-2">Easy</span>
+                            <span id="successful_submissions_easy" class="text-2xl font-bold text-white">0</span>
+                        </div>
+                        <div
+                            class="flex flex-col items-center p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                            <span
+                                class="text-[11px] font-semibold text-yellow-500 uppercase tracking-wider mb-2">Medium</span>
+                            <span id="successful_submissions_medium" class="text-2xl font-bold text-white">0</span>
+                        </div>
+                        <div
+                            class="col-span-2 md:col-span-1 flex flex-col items-center p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+                            <span
+                                class="text-[11px] font-semibold text-red-400 uppercase tracking-wider mb-2">Hard</span>
+                            <span id="successful_submissions_hard" class="text-2xl font-bold text-white">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Messages -->
+        <div class="mt-8 w-full max-w-xl mx-auto flex flex-col items-center text-center gap-3 animate-fade-in-up">
+            <p hidden id="error_info"
+                class="w-full text-sm text-red-300 bg-red-950/50 backdrop-blur-md px-6 py-4 rounded-xl border border-red-500/20">
+            </p>
+            <p hidden id="success_acknowledgement"
+                class="w-full text-sm text-emerald-300 bg-emerald-950/50 backdrop-blur-md px-6 py-4 rounded-xl border border-emerald-500/20">
+            </p>
+            <p hidden id="unlinkRepository"
+                class="text-xs text-slate-400 mt-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition-colors">
+                Connected to the wrong repo? <span class="text-slate-300 font-medium">Unlink here</span>.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Floating Footer -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2.5">
+        <!-- Darkmode Toggle -->
+        <div id="darkmode" class="relative z-10 scale-[0.6] origin-right mb-1">
+            <label class="switch">
+                <input id="darkmode-toggle" type="checkbox" />
+                <div class="slider round">
+                    <div class="sun-moon">
+                        <svg id="moon-dot-1" class="moon-dot" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="moon-dot-2" class="moon-dot" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="moon-dot-3" class="moon-dot" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="light-ray-1" class="light-ray" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="light-ray-2" class="light-ray" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="light-ray-3" class="light-ray" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="cloud-1" class="cloud-dark" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="cloud-2" class="cloud-dark" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="cloud-3" class="cloud-dark" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="cloud-4" class="cloud-light" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="cloud-5" class="cloud-light" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                        <svg id="cloud-6" class="cloud-light" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="50"></circle>
+                        </svg>
+                    </div>
+                    <div class="stars">
+                        <svg id="star-1" class="star" viewBox="0 0 20 20">
+                            <path
+                                d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z">
+                            </path>
+                        </svg>
+                        <svg id="star-2" class="star" viewBox="0 0 20 20">
+                            <path
+                                d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z">
+                            </path>
+                        </svg>
+                        <svg id="star-3" class="star" viewBox="0 0 20 20">
+                            <path
+                                d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z">
+                            </path>
+                        </svg>
+                        <svg id="star-4" class="star" viewBox="0 0 20 20">
+                            <path
+                                d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+            </label>
+        </div>
+        <a href="https://github.com/pralinkhaira/GfG-To-GitHub" target="_blank"
+            class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 backdrop-blur-xl border border-white/10 text-slate-300 px-4 py-2 rounded-full shadow-lg transition-all hover:-translate-y-0.5 text-xs font-semibold group">
+            <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                </path>
+            </svg>
+            Star Repository
+        </a>
+        <div
+            class="text-[10px] uppercase tracking-wider font-semibold text-slate-500 bg-[#0B1120] backdrop-blur-md px-3 py-1.5 rounded-full border border-white/5 shadow-sm">
+            Revamped by <a href="https://pralinkhaira.github.io" target="_blank"
+                class="text-slate-300 hover:text-white transition-colors">Pralin Khaira</a>
+        </div>
+    </div>
+
+    <!-- Animation Keyframes -->
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+
+    <script src="./scripts/darkmode.js"></script>
+    <script src="./scripts/particles.min.js"></script>
+    <script src="./scripts/index.js"></script>
+    <script src="./scripts/particle.js"></script>
+</body>
+
+</html>
