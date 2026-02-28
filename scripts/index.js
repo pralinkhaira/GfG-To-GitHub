@@ -75,7 +75,7 @@ const createRepository = (accessToken, repositoryName) => {
     name,
     private: true,
     auto_init: true,
-    description: 'This repository serves as a collection of my solutions to various GeeksforGeeks Data Structures and Algorithms (DSA) problems, organized by the level of difficulty. - Created using [GfG To GitHub](https://github.com/AtharvaNanavate/GfG-To-GitHub)',
+    description: 'This repository serves as a collection of my solutions to various GeeksforGeeks Data Structures and Algorithms (DSA) problems, organized by the level of difficulty. - Created using [GfG To GitHub](https://github.com/pralinkhaira/GfG-To-GitHub)',
   };
   repositoryInit = JSON.stringify(repositoryInit);
 
@@ -164,7 +164,7 @@ const linkRepo = (accessToken, repositoryName) => {
               $('#success_acknowledgement').show();
               $('#unlinkRepository').show();
               $(
-                `<a target="_blank" href="https://github.com/pralinkhaira/GfG-To-GitHub/tree/main" class="inline-flex mt-6 items-center justify-center gap-2 group mx-auto px-5 py-2.5 rounded-full bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/20 hover:border-yellow-500/30 transition-all shadow-sm">
+                `<a target="_blank" href="https://github.com/pralinkhaira/GfG-To-GitHub/tree/main" class="inline-flex mt-6 items-center justify-center gap-2 group mx-auto px-4 py-1.5 rounded-full bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/20 hover:border-yellow-500/30 transition-all shadow-sm">
             <svg class="h-4 w-4 text-yellow-500 group-hover:animate-pulse" viewBox="0 0 24 24" fill="currentColor">
               <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd"/>
             </svg>

@@ -4,14 +4,6 @@ const updateTheme = (isDark) => {
   } else {
     $('html').removeClass('dark');
   }
-
-  // Toggle images based on dark mode state
-  let github_logo = isDark ? './assets/github_white.png' : './assets/github.png';
-  $('.github_logo').attr('src', github_logo);
-  let web_logo = isDark ? './assets/web_dark.png' : './assets/web_light.png';
-  $('#web_logo').attr('src', web_logo);
-  let mail_logo = isDark ? './assets/mail_dark.png' : './assets/mail_light.png';
-  $('#mail_logo').attr('src', mail_logo);
 };
 
 // Initialize dark mode from storage on page load
