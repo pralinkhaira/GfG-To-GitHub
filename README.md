@@ -69,7 +69,7 @@ Deploy the local folder directly into your Chrome browser:
 4. **Solve Problems**: Head over to the [GeeksForGeeks Explore](https://www.geeksforgeeks.org/explore) page and start coding! 
 5. **Watch the Magic**: Whenever you successfully submit a correct solution, head directly to your GitHub repository to see the newly synced code and its elegantly formatted `README.md`.
 
-## 🎨 Customizing the UI (For Developers)
+## 📝 Important Note
 
 If you downloaded the ZIP file just to use the extension, **you do not need to install Node.js or run any commands.** The fully compiled `tailwind.css` file is already included.
 
