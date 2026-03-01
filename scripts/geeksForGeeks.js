@@ -48,19 +48,52 @@ const uploadToGitHubRepository = (
             userStatistics.easy = 0;
             userStatistics.medium = 0;
             userStatistics.hard = 0;
+            userStatistics.streak = 0;
+            userStatistics.lastSubmitted = null;
             userStatistics.sha = {};
 
           }
           const githubFilePath = problemTitle + uploadFileName;
 
-          if (uploadFileName === 'README.md' && sha === null) {
-            const diff = problemDifficulty ? problemDifficulty.toLowerCase() : '';
-            userStatistics.solved += 1;
-            userStatistics.school += diff.includes('school') ? 1 : 0;
-            userStatistics.basic += diff.includes('basic') ? 1 : 0;
-            userStatistics.easy += diff.includes('easy') ? 1 : 0;
-            userStatistics.medium += diff.includes('medium') ? 1 : 0;
-            userStatistics.hard += diff.includes('hard') ? 1 : 0;
+          if (uploadFileName === 'README.md') {
+            if (sha === null) {
+              const diff = problemDifficulty ? problemDifficulty.toLowerCase() : '';
+              userStatistics.solved += 1;
+              userStatistics.school += diff.includes('school') ? 1 : 0;
+              userStatistics.basic += diff.includes('basic') ? 1 : 0;
+              userStatistics.easy += diff.includes('easy') ? 1 : 0;
+              userStatistics.medium += diff.includes('medium') ? 1 : 0;
+              userStatistics.hard += diff.includes('hard') ? 1 : 0;
+            }
+
+            const todayDate = new Date().toISOString().split('T')[0];
+            const lastSubmitted = userStatistics.lastSubmitted || null;
+
+            if (lastSubmitted !== todayDate) {
+              if (lastSubmitted) {
+                const prevDate = new Date(lastSubmitted);
+                const currDate = new Date(todayDate);
+                const diffTime = Math.abs(currDate - prevDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 1) {
+                  userStatistics.streak = (userStatistics.streak || 0) + 1;
+                } else {
+                  userStatistics.streak = 1;
+                }
+              } else {
+                userStatistics.streak = 1;
+              }
+              userStatistics.lastSubmitted = todayDate;
+            }
+          } else if (sha === null) {
+            if (!userStatistics.languages) {
+              userStatistics.languages = {};
+            }
+            const ext = uploadFileName.split('.').pop();
+            if (ext) {
+              userStatistics.languages[ext] = (userStatistics.languages[ext] || 0) + 1;
+            }
           }
           userStatistics.sha[githubFilePath] = updatedSha;
           chrome.storage.local.set({ userStatistics }, () => {
@@ -239,6 +272,8 @@ const loader = setInterval(() => {
           problemStatement = getProblemStatement();
           solutionLanguage = getSolutionLanguage();
           console.log("Initialised Upload Variables");
+
+          chrome.runtime.sendMessage({ type: 'showFireBadge' });
 
           const probName = `${problemTitle}`;
           var questionUrl = window.location.href;

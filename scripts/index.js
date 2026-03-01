@@ -186,6 +186,35 @@ const linkRepo = (accessToken, repositoryName) => {
                   $('#successful_submissions_easy').text(userStatistics.easy);
                   $('#successful_submissions_medium').text(userStatistics.medium);
                   $('#successful_submissions_hard').text(userStatistics.hard);
+                  $('#current_streak').text(userStatistics.streak || 0);
+
+                  if (userStatistics.sha && Object.keys(userStatistics.sha).length > 0) {
+                    const langMap = {
+                      'py': 'Python', 'cpp': 'C++', 'c': 'C', 'cs': 'C#', 'java': 'Java', 'js': 'JavaScript'
+                    };
+                    let dynamicLangCounts = {};
+                    for (const fileKey of Object.keys(userStatistics.sha)) {
+                      if (!fileKey.endsWith('.md')) {
+                        const ext = fileKey.split('.').pop();
+                        if (ext) {
+                          dynamicLangCounts[ext] = (dynamicLangCounts[ext] || 0) + 1;
+                        }
+                      }
+                    }
+
+                    if (Object.keys(dynamicLangCounts).length > 0) {
+                      $('#language_stats_container').empty();
+                      for (const [ext, count] of Object.entries(dynamicLangCounts)) {
+                        const langName = langMap[ext] || ext;
+                        $('#language_stats_container').append(
+                          `<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/[0.04] transition-colors">
+                               <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">${langName}</span>
+                               <span class="text-xs font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-100 dark:bg-emerald-900/40 px-1.5 rounded text-center">${count}</span>
+                             </div>`
+                        );
+                      }
+                    }
+                  }
                 }
               });
             },

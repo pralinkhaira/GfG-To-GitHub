@@ -41,10 +41,39 @@ chrome.storage.local.get('githubAccessToken', (responseToken) => {
                     $('#successful_submissions_easy').text(userStatistics.easy);
                     $('#successful_submissions_medium').text(userStatistics.medium);
                     $('#successful_submissions_hard').text(userStatistics.hard);
+                    $('#current_streak').text(userStatistics.streak || 0);
+
+                    if (userStatistics.sha && Object.keys(userStatistics.sha).length > 0) {
+                      const langMap = {
+                        'py': 'Python', 'cpp': 'C++', 'c': 'C', 'cs': 'C#', 'java': 'Java', 'js': 'JavaScript'
+                      };
+                      let dynamicLangCounts = {};
+                      for (const fileKey of Object.keys(userStatistics.sha)) {
+                        if (!fileKey.endsWith('.md')) {
+                          const ext = fileKey.split('.').pop();
+                          if (ext) {
+                            dynamicLangCounts[ext] = (dynamicLangCounts[ext] || 0) + 1;
+                          }
+                        }
+                      }
+
+                      if (Object.keys(dynamicLangCounts).length > 0) {
+                        $('#language_stats_container').empty();
+                        for (const [ext, count] of Object.entries(dynamicLangCounts)) {
+                          const langName = langMap[ext] || ext;
+                          $('#language_stats_container').append(
+                            `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                               <span class="text-[10px] font-semibold text-slate-600 dark:text-slate-300">${langName}</span>
+                               <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-100 dark:bg-emerald-900/40 px-1.5 rounded-sm">${count}</span>
+                             </div>`
+                          );
+                        }
+                      }
+                    }
                   }
                   const gitHubLinkedRepository = userStats.github_LinkedRepository;
                   if (gitHubLinkedRepository) {
-                    $('#repository_link').html(`<a target="blank" style="color: #104a8e !important; font-size:0.8em;" href="https://github.com/${gitHubLinkedRepository}">${gitHubLinkedRepository}</a>`,);
+                    $('#repository_link').html(`<a target="_blank" href="https://github.com/${gitHubLinkedRepository}">${gitHubLinkedRepository}</a>`);
                   }
                 },
               );

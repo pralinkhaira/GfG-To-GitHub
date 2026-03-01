@@ -61,6 +61,15 @@ hr {
   font-size: 14px;
 }
 
+#repository_link a {
+  color: #104a8e !important;
+  font-size: 0.8em;
+}
+
+html.dark #repository_link a {
+  color: #FFD700 !important;
+}
+
 button {
   appearance: none;
   background-color: #2ea44f;

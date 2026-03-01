@@ -88,6 +88,18 @@ However, if you want to modify the physical styling, alter the responsive design
 
 ---
 
+## 📜 Update History
+
+### Update V1 - 01/03/2026
+
+- **Golden Link Color**: Updated the linked repository text to a golden hue for better readability in dark mode.
+- **Streak Counter**: Added a new "Streak" metric alongside the "Total Solved" stats on both the popup and main index dashboards to track consecutive days of problem-solving.
+- **Clean Interface**: Improved general UI layout and removed the fire emoji from the Streak titles for a cleaner, modern look.
+- **Submission Badge Status**: Engineered a dynamic 🔥 badge that flashes on the extension toolbar icon precisely when a problem is successfully committed to GitHub.
+- **Languages Used Tally**: Implemented a sophisticated dynamic language counting system that analyzes raw GitHub commits and accurately renders the total number of solutions matched securely by language extension on both dashboard views.
+
+---
+
 ## 📝 Technologies Used
 
 - **Client Code**: Vanilla JavaScript (ES6+), HTML5

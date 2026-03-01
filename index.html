@@ -128,14 +128,25 @@
 
             <div
                 class="bg-white/90 dark:bg-[#0f172a]/70 backdrop-blur-xl rounded-3xl border border-slate-200 dark:border-white/[0.08] p-8 md:p-12 w-full shadow-2xl transition-colors">
-                <div class="flex flex-col items-center">
-                    <p
-                        class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6 transition-colors">
-                        Total Solved</p>
+                <div class="flex flex-col items-center w-full">
+                    <div class="flex flex-row items-center justify-center mb-12 gap-10 md:gap-16">
+                        <div class="flex flex-col items-center">
+                            <p
+                                class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 transition-colors">
+                                Total Solved</p>
+                            <span id="successful_submissions"
+                                class="text-7xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-slate-400 dark:from-white dark:to-slate-400 drop-shadow-sm transition-all duration-500 px-2 pb-2">0</span>
+                        </div>
 
-                    <div class="mb-12">
-                        <span id="successful_submissions"
-                            class="text-7xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-slate-900 to-slate-400 dark:from-white dark:to-slate-400 drop-shadow-sm transition-all duration-500">0</span>
+                        <div class="w-px h-24 md:h-32 bg-slate-200 dark:bg-white/[0.08]"></div>
+
+                        <div class="flex flex-col items-center">
+                            <p
+                                class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 transition-colors">
+                                Streak</p>
+                            <span id="current_streak"
+                                class="text-7xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-red-600 dark:from-orange-400 dark:to-red-500 drop-shadow-sm transition-all duration-500 px-2 pb-2">0</span>
+                        </div>
                     </div>
 
                     <div
@@ -176,6 +187,17 @@
                                 class="text-2xl font-bold text-slate-800 dark:text-white transition-colors">0</span>
                         </div>
                     </div>
+
+                    <!-- Language Stats -->
+                    <div class="w-full mt-6 pt-6 border-t border-slate-100 dark:border-white/[0.06] transition-colors">
+                        <p
+                            class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 text-center transition-colors">
+                            Languages Used</p>
+                        <div id="language_stats_container" class="flex flex-wrap items-center justify-center gap-3">
+                            <span class="text-xs text-slate-500 dark:text-slate-400">No stats yet</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
