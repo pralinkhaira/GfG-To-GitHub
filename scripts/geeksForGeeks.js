@@ -65,35 +65,43 @@ const uploadToGitHubRepository = (
               userStatistics.medium += diff.includes('medium') ? 1 : 0;
               userStatistics.hard += diff.includes('hard') ? 1 : 0;
             }
-
-            const todayDate = new Date().toISOString().split('T')[0];
-            const lastSubmitted = userStatistics.lastSubmitted || null;
-
-            if (lastSubmitted !== todayDate) {
-              if (lastSubmitted) {
-                const prevDate = new Date(lastSubmitted);
-                const currDate = new Date(todayDate);
-                const diffTime = Math.abs(currDate - prevDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                if (diffDays === 1) {
-                  userStatistics.streak = (userStatistics.streak || 0) + 1;
-                } else {
-                  userStatistics.streak = 1;
-                }
-              } else {
-                userStatistics.streak = 1;
-              }
-              userStatistics.lastSubmitted = todayDate;
-            }
-          } else if (sha === null) {
+          } else {
             if (!userStatistics.languages) {
               userStatistics.languages = {};
+              for (const fileKey of Object.keys(userStatistics.sha || {})) {
+                if (!fileKey.endsWith('.md')) {
+                  const fileExt = fileKey.split('.').pop();
+                  if (fileExt) {
+                    userStatistics.languages[fileExt] = (userStatistics.languages[fileExt] || 0) + 1;
+                  }
+                }
+              }
             }
             const ext = uploadFileName.split('.').pop();
             if (ext) {
               userStatistics.languages[ext] = (userStatistics.languages[ext] || 0) + 1;
             }
+          }
+
+          const todayDate = new Date().toISOString().split('T')[0];
+          const lastSubmitted = userStatistics.lastSubmitted || null;
+
+          if (lastSubmitted !== todayDate) {
+            if (lastSubmitted) {
+              const prevDate = new Date(lastSubmitted);
+              const currDate = new Date(todayDate);
+              const diffTime = Math.abs(currDate - prevDate);
+              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+              if (diffDays === 1) {
+                userStatistics.streak = (userStatistics.streak || 0) + 1;
+              } else {
+                userStatistics.streak = 1;
+              }
+            } else {
+              userStatistics.streak = 1;
+            }
+            userStatistics.lastSubmitted = todayDate;
           }
           userStatistics.sha[githubFilePath] = updatedSha;
           chrome.storage.local.set({ userStatistics }, () => {

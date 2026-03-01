@@ -47,12 +47,16 @@ chrome.storage.local.get('githubAccessToken', (responseToken) => {
                       const langMap = {
                         'py': 'Python', 'cpp': 'C++', 'c': 'C', 'cs': 'C#', 'java': 'Java', 'js': 'JavaScript'
                       };
-                      let dynamicLangCounts = {};
-                      for (const fileKey of Object.keys(userStatistics.sha)) {
-                        if (!fileKey.endsWith('.md')) {
-                          const ext = fileKey.split('.').pop();
-                          if (ext) {
-                            dynamicLangCounts[ext] = (dynamicLangCounts[ext] || 0) + 1;
+                      let dynamicLangCounts = userStatistics.languages;
+
+                      if (!dynamicLangCounts || Object.keys(dynamicLangCounts).length === 0) {
+                        dynamicLangCounts = {};
+                        for (const fileKey of Object.keys(userStatistics.sha)) {
+                          if (!fileKey.endsWith('.md')) {
+                            const ext = fileKey.split('.').pop();
+                            if (ext) {
+                              dynamicLangCounts[ext] = (dynamicLangCounts[ext] || 0) + 1;
+                            }
                           }
                         }
                       }
