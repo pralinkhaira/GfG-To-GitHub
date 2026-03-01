@@ -105,3 +105,19 @@ However, if you want to modify the physical styling, alter the responsive design
 - **Client Code**: Vanilla JavaScript (ES6+), HTML5
 - **Styling UI**: Tailwind CSS, Vanilla CSS, jQuery
 - **Service Integration**: Chrome Manifest V3 APIs, GitHub REST API (v3)
+---
+## 📸 Screenshots
+<p align="center">
+<img width="582" height="743" alt="image" src="https://github.com/user-attachments/assets/52a502f8-45ef-4dd8-bbe2-a5029c80273d" />
+</p>
+<p align="center">
+<img width="488" height="354" alt="image" src="https://github.com/user-attachments/assets/f1906534-821a-4152-9153-8d7ec33a29a1" />
+</p>
+<p align="center">
+<img width="1913" height="951" alt="image" src="https://github.com/user-attachments/assets/c986cad1-59a9-4d05-a6e4-e08657f54c90" />
+</p>
+<p align="center">
+<img width="1919" height="896" alt="image" src="https://github.com/user-attachments/assets/ca9c64aa-8d0c-4601-9894-2eaa241e4a42" />
+</p>
+
+
