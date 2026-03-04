@@ -9,9 +9,11 @@ Featuring a beautiful, revamped dark-mode interface and a minimal onboarding pro
 ## 🚀 Features
 
 - **Automated Sync**: Automatically pushes your successful GeeksForGeeks solutions directly to your linked GitHub repository.
+- **Multi-Language Support**: Detects and records solutions in **C++, Java, Python, C#, and JavaScript** with robust, multi-strategy language detection.
 - **Beautiful UI**: Completely revamped design featuring glassmorphism, glowing ambient accents, and a fluid dark/night mode toggle.
 - **Dashboard Progression**: A built-in dashboard in the extension popup to track your total problems solved across different difficulty tiers (School, Basic, Easy, Medium, Hard).
 - **Flexible Repository Setup**: Choose to create a new private repository automatically or link an existing one.
+- **Cross-Platform Folder Structure**: Solutions are organized into folders like `Difficulty-Easy`, `Difficulty-Medium`, `Difficulty-Hard` — using hyphens instead of colons for full compatibility across Windows, macOS, and Linux.
 - **Flawless Formatting**: Creates organized folder structures and a beautiful `README.md` for every single problem solved alongside your code.
 
 ---
@@ -20,7 +22,8 @@ Featuring a beautiful, revamped dark-mode interface and a minimal onboarding pro
 
 1. The extension uses Chrome's local storage and a connection to the GitHub REST API to securely authenticate you via an OAuth token.
 2. It tracks the GeeksForGeeks execution DOM. When a successful "Problem Solved Successfully" flag is detected, it captures your current code and the problem's descriptive context.
-3. The script formats the data and performs discrete `PUT` requests to the repository you linked, committing the newly solved code straight into your GitHub portfolio!
+3. The language is detected using multiple fallback strategies — from DOM selectors to reading the Ace editor's internal mode — ensuring reliable detection across all supported languages.
+4. The script formats the data and performs discrete `PUT` requests to the repository you linked, committing the newly solved code straight into your GitHub portfolio!
 
 ---
 
@@ -89,6 +92,14 @@ However, if you want to modify the physical styling, alter the responsive design
 ---
 
 ## 📜 Update History
+
+### Update V2 - 04/03/2026
+
+- **Fixed Folder Naming**: Changed difficulty folder names from `Difficulty: Easy` to `Difficulty-Easy` (replacing colons with hyphens). Colons are invalid in Windows file paths and caused errors when cloning repositories.
+- **Fixed Language Detection**: Completely rewrote `getSolutionLanguage()` with a multi-strategy fallback system. The old `'divider text'` CSS class selector no longer exists on GeeksForGeeks, which caused the extension to silently skip uploads for most languages.
+- **Ace Editor Integration**: Added a new `extractLanguage.js` script that injects into the page's MAIN world to read the Ace editor's internal mode setting — the most reliable way to detect the selected language.
+- **Full Language Support**: All 5 languages now work reliably: **C++**, **Java**, **Python**, **C#**, and **JavaScript**.
+- **Case-Insensitive Matching**: Language name matching is now case-insensitive, handling variations like `Python` vs `python`, `JavaScript` vs `javascript`.
 
 ### Update V1 - 01/03/2026
 

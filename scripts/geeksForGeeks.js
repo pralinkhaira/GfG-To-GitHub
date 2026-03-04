@@ -1,13 +1,21 @@
 const codeLanguage = {
-  C: '.c',
-  'C++': '.cpp',
-  'C#': '.cs',
-  Java: '.java',
-  Python: '.py',
-  Python3: '.py',
-  JavaScript: '.js',
-  Javascript: '.js'
+  'c': '.c',
+  'c++': '.cpp',
+  'c#': '.cs',
+  'java': '.java',
+  'python': '.py',
+  'python3': '.py',
+  'javascript': '.js',
 };
+
+function matchLanguage(langText) {
+  if (!langText) return null;
+  const lang = langText.split('(')[0].trim().toLowerCase();
+  if (lang.length > 0 && codeLanguage[lang]) {
+    return codeLanguage[lang];
+  }
+  return null;
+}
 
 let successfulSubmissionFlag = true;
 
@@ -170,16 +178,75 @@ const convertToKebabCase = (uploadFileName) => {
 };
 
 function getSolutionLanguage() {
+  // Strategy 1: Original selector (legacy GfG UI)
   const languageElements = document.getElementsByClassName('divider text');
   if (languageElements && languageElements.length > 0) {
-    const langRaw = languageElements[0].innerText;
-    if (langRaw) {
-      const lang = langRaw.split('(')[0].trim();
-      if (lang.length > 0 && codeLanguage[lang]) {
-        return codeLanguage[lang];
-      }
-    }
+    const result = matchLanguage(languageElements[0].innerText);
+    if (result) return result;
   }
+
+  // Strategy 2: Look for language selector dropdown text
+  const selectors = [
+    '[class*="languageSelector"]',
+    '[class*="language-selector"]',
+    '[class*="lang-select"]',
+    '[class*="language_dropdown"]',
+    '[class*="select-language"]',
+    'select[class*="language"]',
+    '[class*="ant-select-selection-item"]',
+    '.selected-lang',
+    '[class*="dropdown"] [class*="selected"]',
+    '[class*="problems_header"] [class*="select"]',
+  ];
+  for (const selector of selectors) {
+    try {
+      const el = document.querySelector(selector);
+      if (el) {
+        const result = matchLanguage(el.innerText || el.textContent || el.value);
+        if (result) return result;
+      }
+    } catch (e) { /* skip invalid selectors */ }
+  }
+
+  // Strategy 3: Look for active tab / button indicating selected language
+  const activeSelectors = [
+    '[class*="active"][class*="lang"]',
+    'button[class*="active"][class*="lang"]',
+    '.tab.active',
+  ];
+  for (const selector of activeSelectors) {
+    try {
+      const el = document.querySelector(selector);
+      if (el) {
+        const result = matchLanguage(el.innerText || el.textContent);
+        if (result) return result;
+      }
+    } catch (e) { /* skip invalid selectors */ }
+  }
+
+  // Strategy 4: Detect from Ace editor mode via DOM injection
+  // (Content scripts run in an isolated world and can't access `ace` directly,
+  //  so we inject a page-level script to extract the mode into a DOM element)
+  try {
+    const existingLangEl = document.getElementById('extractedLanguageMode');
+    if (existingLangEl) {
+      const modeName = existingLangEl.innerText.trim();
+      const modeMap = {
+        'python': '.py',
+        'c_cpp': '.cpp',
+        'java': '.java',
+        'csharp': '.cs',
+        'javascript': '.js',
+        'c': '.c',
+      };
+      if (modeName && modeMap[modeName]) {
+        existingLangEl.remove();
+        return modeMap[modeName];
+      }
+      existingLangEl.remove();
+    }
+  } catch (e) { /* skip */ }
+
   return null;
 }
 
@@ -194,7 +261,8 @@ function getProblemTitle() {
 function getProblemDifficulty() {
   const problemDifficultyNode = document.querySelector('[class^="problems_header_description"]');
   if (problemDifficultyNode && problemDifficultyNode.children.length > 0) {
-    return problemDifficultyNode.children[0].innerText || '';
+    const rawDifficulty = problemDifficultyNode.children[0].innerText || '';
+    return rawDifficulty.replace(/:\s*/g, '-');
   }
   return '';
 }
@@ -278,72 +346,84 @@ const loader = setInterval(() => {
           problemTitle = getProblemTitle().trim();
           problemDifficulty = getProblemDifficulty();
           problemStatement = getProblemStatement();
-          solutionLanguage = getSolutionLanguage();
           console.log("Initialised Upload Variables");
 
           chrome.runtime.sendMessage({ type: 'showFireBadge' });
 
-          const probName = `${problemTitle}`;
-          var questionUrl = window.location.href;
-          problemStatement = `<h2><a href="${questionUrl}">${problemTitle}</a></h2><h3>Difficulty Level : ${problemDifficulty}</h3><hr>${problemStatement}`;
-          problemStatement = getCompanyAndTopicTags(problemStatement);
+          // First inject the language extraction script into MAIN world
+          chrome.runtime.sendMessage({ type: 'getLanguageMode' }, function () {
+            console.log("getLanguageMode - Message Sent.");
 
-          if (solutionLanguage !== null) {
-            chrome.storage.local.get('userStatistics', (statistics) => {
-              const { userStatistics } = statistics;
-              const githubFilePath = probName + convertToKebabCase(problemTitle + solutionLanguage);
-              let sha = null;
-              if (
-                userStatistics !== undefined &&
-                userStatistics.sha !== undefined &&
-                userStatistics.sha[githubFilePath] !== undefined
-              ) {
-                sha = userStatistics.sha[githubFilePath];
-              }
-              if (sha === null) {
-                uploadGitHub(
-                  btoa(unescape(encodeURIComponent(problemStatement))),
-                  probName,
-                  'README.md',
-                  "Create README - GfG to GitHub",
-                  problemDifficulty,
-                );
-              }
+            // Wait for the injected script to populate the DOM element
+            setTimeout(function () {
+              solutionLanguage = getSolutionLanguage();
+              console.log("Detected language:", solutionLanguage);
 
-              chrome.runtime.sendMessage({ type: 'getUserSolution' }, function (res) {
+              const probName = `${problemTitle}`;
+              var questionUrl = window.location.href;
+              problemStatement = `<h2><a href="${questionUrl}">${problemTitle}</a></h2><h3>Difficulty Level : ${problemDifficulty}</h3><hr>${problemStatement}`;
+              problemStatement = getCompanyAndTopicTags(problemStatement);
 
-                console.log("getUserSolution - Message Sent.");
-                setTimeout(function () {
-                  solution = document.getElementById('extractedUserSolution').innerText;
-                  if (solution !== '') {
-                    setTimeout(function () {
-                      if (sha === null) {
-                        uploadGitHub(
-                          btoa(unescape(encodeURIComponent(solution))),
-                          probName,
-                          convertToKebabCase(problemTitle + solutionLanguage),
-                          "Added Solution - GfG to GitHub",
-                          problemDifficulty,
-                        );
-                      }
-                      else {
-                        uploadGitHub(
-                          btoa(unescape(encodeURIComponent(solution))),
-                          probName,
-                          convertToKebabCase(problemTitle + solutionLanguage),
-                          "Updated Solution - GfG to GitHub",
-                          problemDifficulty,
-                        );
-                      }
-                    }, 1000);
+              if (solutionLanguage !== null) {
+                chrome.storage.local.get('userStatistics', (statistics) => {
+                  const { userStatistics } = statistics;
+                  const githubFilePath = probName + convertToKebabCase(problemTitle + solutionLanguage);
+                  let sha = null;
+                  if (
+                    userStatistics !== undefined &&
+                    userStatistics.sha !== undefined &&
+                    userStatistics.sha[githubFilePath] !== undefined
+                  ) {
+                    sha = userStatistics.sha[githubFilePath];
                   }
-                  chrome.runtime.sendMessage({ type: 'deleteNode' }, function () {
-                    console.log("deleteNode - Message Sent.");
+                  if (sha === null) {
+                    uploadGitHub(
+                      btoa(unescape(encodeURIComponent(problemStatement))),
+                      probName,
+                      'README.md',
+                      "Create README - GfG to GitHub",
+                      problemDifficulty,
+                    );
+                  }
+
+                  chrome.runtime.sendMessage({ type: 'getUserSolution' }, function (res) {
+
+                    console.log("getUserSolution - Message Sent.");
+                    setTimeout(function () {
+                      solution = document.getElementById('extractedUserSolution').innerText;
+                      if (solution !== '') {
+                        setTimeout(function () {
+                          if (sha === null) {
+                            uploadGitHub(
+                              btoa(unescape(encodeURIComponent(solution))),
+                              probName,
+                              convertToKebabCase(problemTitle + solutionLanguage),
+                              "Added Solution - GfG to GitHub",
+                              problemDifficulty,
+                            );
+                          }
+                          else {
+                            uploadGitHub(
+                              btoa(unescape(encodeURIComponent(solution))),
+                              probName,
+                              convertToKebabCase(problemTitle + solutionLanguage),
+                              "Updated Solution - GfG to GitHub",
+                              problemDifficulty,
+                            );
+                          }
+                        }, 1000);
+                      }
+                      chrome.runtime.sendMessage({ type: 'deleteNode' }, function () {
+                        console.log("deleteNode - Message Sent.");
+                      });
+                    }, 1000);
                   });
-                }, 1000);
-              });
-            });
-          }
+                });
+              } else {
+                console.log("GfG-To-GitHub: Could not detect solution language. Skipping upload.");
+              }
+            }, 500);
+          });
         }
 
         else if (submissionResult.includes('Compilation Error')) {

@@ -13,6 +13,15 @@ chrome.runtime.onMessage.addListener(
       sendResponse({ status: true });
     }
 
+    if (request.type == 'getLanguageMode') {
+      chrome.scripting.executeScript({
+        target: { tabId: sender.tab.id },
+        files: ['scripts/extractLanguage.js'],
+        world: 'MAIN',
+      });
+      sendResponse({ status: true });
+    }
+
     if (request.type == 'deleteNode') {
       chrome.scripting.executeScript({
         target: { tabId: sender.tab.id },
